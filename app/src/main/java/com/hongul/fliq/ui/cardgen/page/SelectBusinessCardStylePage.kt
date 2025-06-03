@@ -1,4 +1,4 @@
-package com.hongul.fliq.ui.customize.page
+package com.hongul.fliq.ui.cardgen.page
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image

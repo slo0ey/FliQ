@@ -1,5 +1,6 @@
-package com.hongul.fliq.ui.customize.page
+package com.hongul.fliq.ui.cardgen.page
 
+import android.Manifest
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -12,24 +13,37 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun BusinessCardScanPage(onBack: () -> Unit = {}, onNext: () -> Unit) {
     val progress = 0.6f
     val lifecycleOwner = LocalLifecycleOwner.current
+
+    val cameraPermission = rememberPermissionState(
+        Manifest.permission.CAMERA
+    )
+
+    LaunchedEffect(Unit) {
+        if (!cameraPermission.status.isGranted) {
+            cameraPermission.launchPermissionRequest()
+        }
+    }
 
     Log.d("Basic", "Recomposition")
     Scaffold() { innerPadding ->
@@ -121,7 +135,7 @@ fun CameraPreviewView(lifecycleOwner: LifecycleOwner) {
                 val cameraProvider = cameraProviderFuture.get()
 
                 val preview = androidx.camera.core.Preview.Builder().build().also {
-                    it.setSurfaceProvider(previewView.surfaceProvider)
+                    it.surfaceProvider = previewView.surfaceProvider
                 }
 
                 val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
@@ -142,6 +156,6 @@ fun CameraPreviewView(lifecycleOwner: LifecycleOwner) {
         },
         modifier = Modifier
             .fillMaxWidth()
-            .height(400.dp)
     )
 }
+

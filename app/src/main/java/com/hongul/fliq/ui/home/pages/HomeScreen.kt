@@ -102,7 +102,11 @@ fun HomeScreen(
                     verticalAlignment = Alignment.Top
                 ) { page ->
                     if (page == pagerState.pageCount - 1) {
-                        CreateCardPageView()
+                        CreateCardPageView(
+                            onClick = {
+                                navigator.navigate("cardgen")
+                            }
+                        )
                     } else {
                         CardPageView(
                             onClickInfo = {

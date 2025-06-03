@@ -1,6 +1,5 @@
-package com.hongul.fliq.ui.customize.page
+package com.hongul.fliq.ui.cardgen.page
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -28,27 +26,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScannedInfoCheckPage(onBack: () -> Unit = {}, onNext: () -> Unit) {
-    val progress = 0.8f
-
-    val name = remember { mutableStateOf("") }
-    val phone = remember { mutableStateOf("") }
-    val email = remember { mutableStateOf("") }
-    val address = remember { mutableStateOf("") }
-
+fun OrganizationInfoPage(onBack: () -> Unit = {}, onNext: () -> Unit) {
+    val progress = 0.5f
     val errorMessage = remember { mutableStateOf("") }
+    val organization = remember { mutableStateOf("") }
+    val department = remember { mutableStateOf("") }
+    val position = remember { mutableStateOf("") }
 
-    Log.d("Basic", "Recomposition")
-    Scaffold()
-    { innerPadding ->
+    Scaffold() { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -72,7 +66,7 @@ fun ScannedInfoCheckPage(onBack: () -> Unit = {}, onNext: () -> Unit) {
             }
 
             Text(
-                text = "해당 정보를\n확인해 주세요.",
+                text = "나의 소속을\n입력해 주세요.",
                 fontSize = 30.sp,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(vertical = 20.dp)
@@ -81,57 +75,26 @@ fun ScannedInfoCheckPage(onBack: () -> Unit = {}, onNext: () -> Unit) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = buildAnnotatedString {
-                        append("이름 또는 닉네임 ")
+                        append("기업 또는 단체명 ")
+                        withStyle(style = SpanStyle(color = Color.Red)) {
+                            append("*")
+                        }
                     },
                     modifier = Modifier.padding(start = 5.dp, bottom = 4.dp),
                     fontWeight = FontWeight.Bold
                 )
 
                 OutlinedTextField(
-                    value = name.value,
-                    onValueChange = { name.value = it },
-                    placeholder = { Text("홍얼홍얼", color = Color.Black) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                        .background(Color.Gray.copy(alpha = 0.1f), RoundedCornerShape(8.dp)),
-                    shape = RoundedCornerShape(8.dp),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent
-                    )
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-
-
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    text = buildAnnotatedString {
-                        append("휴대폰 번호 ")
-                    },
-                    modifier = Modifier.padding(start = 5.dp, bottom = 4.dp),
-                    fontWeight = FontWeight.Bold
-                )
-
-                OutlinedTextField(
-                    value = phone.value,
-                    onValueChange = { phone.value = it },
-                    placeholder = { Text("+82) 10.0000.0000", color = Color.Black) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                    value = organization.value,
+                    onValueChange = { organization.value = it },
+                    placeholder = { Text("예) 계명대학교") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
                         .background(
                             Color.Gray.copy(alpha = 0.1f),
                             RoundedCornerShape(8.dp)
-                        ), // 배경 설정
+                        ),
                     shape = RoundedCornerShape(8.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.Transparent,
@@ -142,43 +105,12 @@ fun ScannedInfoCheckPage(onBack: () -> Unit = {}, onNext: () -> Unit) {
                         disabledIndicatorColor = Color.Transparent
                     )
                 )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = buildAnnotatedString {
-                        append("이메일 ")
-                    },
-                    modifier = Modifier.padding(start = 5.dp, bottom = 4.dp),
-                    fontWeight = FontWeight.Bold
-                )
-
-                OutlinedTextField(
-                    value = email.value,
-                    onValueChange = { email.value = it },
-                    placeholder = { Text("xxx@stu.kmu.ac.kr", color = Color.Black) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                        .background(
-                            Color.Gray.copy(alpha = 0.1f),
-                            RoundedCornerShape(8.dp)
-                        ), // 배경 설정
-                    shape = RoundedCornerShape(8.dp),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent
-                    )
+                    text = "${organization.value.length}/20",
+                    modifier = Modifier.padding(start = 360.dp, top = 0.dp),
+                    style = androidx.compose.ui.text.TextStyle(fontSize = 12.sp, color = Color.Gray)
                 )
             }
-
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -186,23 +118,25 @@ fun ScannedInfoCheckPage(onBack: () -> Unit = {}, onNext: () -> Unit) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = buildAnnotatedString {
-                        append("태그 ")
+                        append("부서 / 직책")
+                        withStyle(style = SpanStyle(color = Color.Red)) {
+                            append("*")
+                        }
                     },
                     modifier = Modifier.padding(start = 5.dp, bottom = 4.dp),
                     fontWeight = FontWeight.Bold
                 )
-
                 OutlinedTextField(
-                    value = address.value,
-                    onValueChange = { address.value = it },
-                    placeholder = { Text("#명함 #디지털명함 #공유", color = Color.Black) },
+                    value = department.value,
+                    onValueChange = { department.value = it },
+                    placeholder = { Text("예 ) 컴퓨터공학과 / 5723483") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
                         .background(
                             Color.Gray.copy(alpha = 0.1f),
                             RoundedCornerShape(8.dp)
-                        ), // 배경 설정
+                        ),
                     shape = RoundedCornerShape(8.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.Transparent,
@@ -213,15 +147,63 @@ fun ScannedInfoCheckPage(onBack: () -> Unit = {}, onNext: () -> Unit) {
                         disabledIndicatorColor = Color.Transparent
                     )
                 )
+                Text(
+                    text = "${department.value.length}/20",
+                    modifier = Modifier.padding(start = 360.dp, top = 0.dp),
+                    style = androidx.compose.ui.text.TextStyle(fontSize = 12.sp, color = Color.Gray)
+                )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+
+
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    text = buildAnnotatedString {
+                        append("추가 직책")
+                        withStyle(style = SpanStyle(color = Color.Red)) {
+                            append("*")
+                        }
+                    },
+                    modifier = Modifier.padding(start = 5.dp, bottom = 4.dp),
+                    fontWeight = FontWeight.Bold
+                )
+
+                OutlinedTextField(
+                    value = position.value,
+                    onValueChange = { position.value = it },
+                    placeholder = { Text("예 ) 기획부장") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                        .background(
+                            Color.Gray.copy(alpha = 0.1f),
+                            RoundedCornerShape(8.dp)
+                        ),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    )
+                )
+                Text(
+                    text = "${position.value.length}/20",
+                    modifier = Modifier.padding(start = 360.dp, top = 0.dp),
+                    style = androidx.compose.ui.text.TextStyle(fontSize = 12.sp, color = Color.Gray)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             if (errorMessage.value.isNotEmpty()) {
                 Text(
                     text = errorMessage.value,
                     color = Color.Red,
-                    fontSize = 12.sp,
+                    fontSize = 14.sp,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
@@ -246,3 +228,4 @@ fun ScannedInfoCheckPage(onBack: () -> Unit = {}, onNext: () -> Unit) {
         }
     }
 }
+

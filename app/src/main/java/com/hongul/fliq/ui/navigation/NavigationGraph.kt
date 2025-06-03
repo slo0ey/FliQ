@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.hongul.fliq.ui.cardgen.BusinessCardGenerateScreen
 import com.hongul.fliq.ui.home.pages.CardInfoScreen
 import com.hongul.fliq.ui.home.pages.CardShareScreen
 import com.hongul.fliq.ui.home.pages.HomeScreen
@@ -45,6 +46,10 @@ fun ColumnScope.NavigationGraph(
                 CardInfoScreen(navigator = navController, cardId = cardId)
             }
         }
+        composable("cardgen") {
+            showNavigation(false)
+            BusinessCardGenerateScreen(navigator = navController)
+        }
         composable(
             "share",
             enterTransition = {
@@ -74,7 +79,7 @@ fun ColumnScope.NavigationGraph(
                     ),
                     towards = AnimatedContentTransitionScope.SlideDirection.Down
                 )
-            }
+            },
         ) {
             showNavigation(false)
             CardShareScreen(navigator = navController)

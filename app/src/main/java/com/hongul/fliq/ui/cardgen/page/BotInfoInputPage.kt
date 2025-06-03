@@ -1,4 +1,4 @@
-package com.hongul.fliq.ui.customize.page
+package com.hongul.fliq.ui.cardgen.page
 
 import android.util.Log
 import androidx.compose.foundation.background

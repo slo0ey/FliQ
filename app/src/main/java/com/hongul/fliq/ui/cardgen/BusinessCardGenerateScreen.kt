@@ -1,5 +1,6 @@
-package com.hongul.fliq.ui.customize
+package com.hongul.fliq.ui.cardgen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -23,20 +24,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.hongul.fliq.ui.customize.page.BasicInformationPage
-import com.hongul.fliq.ui.customize.page.BusinessCardCreationPage
-import com.hongul.fliq.ui.customize.page.BusinessCardPhotoGuidePage
-import com.hongul.fliq.ui.customize.page.BusinessCardPreviewPage
-import com.hongul.fliq.ui.customize.page.BusinessCardScanPage
-import com.hongul.fliq.ui.customize.page.CardInputOption
-import com.hongul.fliq.ui.customize.page.OrganizationInfoPage
-import com.hongul.fliq.ui.customize.page.ScannedInfoCheckPage
-import com.hongul.fliq.ui.customize.page.SelectBusinessCardStylePage
+import androidx.navigation.NavHostController
+import com.hongul.fliq.ui.cardgen.page.BasicInformationPage
+import com.hongul.fliq.ui.cardgen.page.BusinessCardCreationPage
+import com.hongul.fliq.ui.cardgen.page.BusinessCardPhotoGuidePage
+import com.hongul.fliq.ui.cardgen.page.BusinessCardPreviewPage
+import com.hongul.fliq.ui.cardgen.page.BusinessCardScanPage
+import com.hongul.fliq.ui.cardgen.page.CardInputOption
+import com.hongul.fliq.ui.cardgen.page.OrganizationInfoPage
+import com.hongul.fliq.ui.cardgen.page.ScannedInfoCheckPage
+import com.hongul.fliq.ui.cardgen.page.SelectBusinessCardStylePage
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BusinessCardGenerateScreen() {
+fun BusinessCardGenerateScreen(
+    navigator: NavHostController
+) {
 
     val ps = rememberPagerState(initialPage = 0) { 15 }//총 페이지 개수 바꾸기
     val scope = rememberCoroutineScope()
@@ -45,7 +49,6 @@ fun BusinessCardGenerateScreen() {
     var title by remember { mutableStateOf("") }
     var selectedTemplateImageRes by remember { mutableStateOf<Int?>(null) }
     var currentSNS by remember { mutableStateOf<String?>(null) } // 현재 선택된 SNS 이름
-
 
     LaunchedEffect(ps.currentPage, currentSNS) {
         title = when {
@@ -179,6 +182,14 @@ fun BusinessCardGenerateScreen() {
                     }
                 }
             }
+        }
+    }
+
+    BackHandler {
+        when (ps.currentPage) {
+            0 -> navigator.popBackStack()
+            5 -> scope.launch { ps.scrollToPage(0) }
+            else -> scope.launch { ps.scrollToPage(ps.currentPage - 1) }
         }
     }
 }
