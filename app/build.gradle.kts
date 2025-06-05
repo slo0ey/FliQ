@@ -25,6 +25,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders["KAKAO_API_KEY"] = props["KAKAO_API_KEY"].toString()
+        buildConfigField("String", "API_URL", props["API_URL"].toString())
         buildConfigField("String", "KAKAO_API_KEY", props["KAKAO_API_KEY"].toString())
     }
 
@@ -78,6 +79,7 @@ dependencies {
     implementation(libs.androidx.camera.extensions)
     implementation(libs.androidx.camera.video)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.datastore.preferences)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

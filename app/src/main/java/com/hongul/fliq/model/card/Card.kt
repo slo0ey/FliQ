@@ -5,7 +5,7 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class Card(
     val id: Int,
-    val owner: Int,
+    val owner: Long,
     val name: String = "",
     val email: String = "",
     val contact: String = "",
