@@ -4,7 +4,10 @@ import android.Manifest
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Box
@@ -25,6 +28,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.currentRecomposeScope
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,13 +48,24 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import kotlinx.coroutines.launch
+import java.io.File
+import kotlin.coroutines.coroutineContext
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun BusinessCardScanPage(onBack: () -> Unit = {}, onNext: () -> Unit) {
     val progress = 0.6f
     val lifecycleOwner = LocalLifecycleOwner.current
+    val context = androidx.compose.ui.platform.LocalContext.current
 
+    // 사진 촬영을 위한 ImageCapture 참조 저장
+    var imageCapture by remember { mutableStateOf<ImageCapture?>(null) }
+
+    // 사진 촬영 상태 관리
+    var isCapturing by remember { mutableStateOf(false) }
+
+    // 카메라 권한 요청
     val cameraPermission = rememberPermissionState(
         Manifest.permission.CAMERA
     )
@@ -103,7 +123,9 @@ fun BusinessCardScanPage(onBack: () -> Unit = {}, onNext: () -> Unit) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                CameraPreviewView(lifecycleOwner)
+                CameraPreviewView(lifecycleOwner, onImageCaptureReady = { imageCaptureInstance ->
+                    imageCapture = imageCaptureInstance
+                })
                 Spacer(modifier = Modifier.height(0.dp))
 
             }
@@ -116,7 +138,41 @@ fun BusinessCardScanPage(onBack: () -> Unit = {}, onNext: () -> Unit) {
                 contentAlignment = Alignment.BottomCenter
             ) {
                 Button(
-                    onClick = { onNext() },
+                    onClick = {
+                        // 사진을 촬영하고 완료되면 onNext 호출
+                        if (!isCapturing && imageCapture != null) {
+                            isCapturing = true
+
+                            val outputDirectory = File(context.getExternalFilesDir(null), "Camera")
+                            if (!outputDirectory.exists()) {
+                                outputDirectory.mkdirs()
+                            }
+                            val photoFile = File(outputDirectory, "business_card_${System.currentTimeMillis()}.jpg")
+                            val outputFileOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+
+                            imageCapture?.takePicture(
+                                outputFileOptions,
+                                ContextCompat.getMainExecutor(context),
+                                object : ImageCapture.OnImageSavedCallback {
+                                    override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                                        Toast.makeText(context, "명함 사진을 분석중입니다...", Toast.LENGTH_SHORT).show()
+                                        isCapturing = false
+
+                                        // 2초 후에 onNext 호출
+                                        android.os.Handler().postDelayed({
+                                            onNext()
+                                        }, 4000)
+                                    }
+
+                                    override fun onError(exception: ImageCaptureException) {
+                                        Log.e("CameraPreview", "Image capture failed", exception)
+                                        Toast.makeText(context, "사진 촬영에 실패하였습니다", Toast.LENGTH_SHORT).show()
+                                        isCapturing = false
+                                    }
+                                }
+                            )
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
@@ -131,7 +187,7 @@ fun BusinessCardScanPage(onBack: () -> Unit = {}, onNext: () -> Unit) {
 }
 
 @Composable
-fun CameraPreviewView(lifecycleOwner: LifecycleOwner) {
+fun CameraPreviewView(lifecycleOwner: LifecycleOwner, onImageCaptureReady: (ImageCapture) -> Unit = {}) {
     AndroidView(
         factory = { context ->
             val previewView = PreviewView(context).apply {
@@ -142,6 +198,10 @@ fun CameraPreviewView(lifecycleOwner: LifecycleOwner) {
             }
 
             val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
+
+            // ImageCapture 인스턴스 생성
+            val imageCapture = ImageCapture.Builder().build()
+
             cameraProviderFuture.addListener({
                 val cameraProvider = cameraProviderFuture.get()
 
@@ -156,8 +216,13 @@ fun CameraPreviewView(lifecycleOwner: LifecycleOwner) {
                     cameraProvider.bindToLifecycle(
                         lifecycleOwner,
                         cameraSelector,
-                        preview
+                        preview,
+                        imageCapture  // ImageCapture 추가
                     )
+
+                    // 상위 컴포넌트에 ImageCapture 인스턴스 전달
+                    onImageCaptureReady(imageCapture)
+
                 } catch (exc: Exception) {
                     Log.e("CameraPreview", "Use case binding failed", exc)
                 }
@@ -169,4 +234,3 @@ fun CameraPreviewView(lifecycleOwner: LifecycleOwner) {
             .fillMaxWidth()
     )
 }
-

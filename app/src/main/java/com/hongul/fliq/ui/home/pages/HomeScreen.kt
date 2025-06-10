@@ -86,7 +86,7 @@ fun HomeScreen(
                 modifier = Modifier.content()
             ) {
 
-                val cardList = listOf(1, 2, 3)
+                val cardList = listOf<Int>(0)
                 val pagerState = rememberPagerState { cardList.size + 1 }
 
                 var showInnerContent by remember { mutableStateOf(true) }
@@ -114,6 +114,9 @@ fun HomeScreen(
                             },
                             onClickShare = {
                                 navigator.navigate("share")
+                            },
+                            onClickChatbot = {
+                                navigator.navigate("chatbot")
                             },
                             innerContentMode =
                                 if (showInnerContent) InnerContentMode.SHOW

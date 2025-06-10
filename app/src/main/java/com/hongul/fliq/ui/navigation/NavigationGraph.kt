@@ -12,9 +12,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.hongul.fliq.ui.cardgen.BusinessCardGenerateScreen
+import com.hongul.fliq.ui.ddu111.TagScreen
 import com.hongul.fliq.ui.home.pages.CardInfoScreen
 import com.hongul.fliq.ui.home.pages.CardShareScreen
 import com.hongul.fliq.ui.home.pages.HomeScreen
+import com.hongul.fliq.ui.hyunjin.ContactScreen
+import com.hongul.fliq.ui.minjiiiiii.Chatbot_info_input
 
 @Composable
 fun ColumnScope.NavigationGraph(
@@ -32,9 +35,11 @@ fun ColumnScope.NavigationGraph(
         }
         composable(NavItem.Contact.route) {
             showNavigation(true)
+            ContactScreen {  }
         }
         composable(NavItem.Search.route) {
             showNavigation(true)
+            TagScreen(onAddFriendScreen = { _, _ ->})
         }
         composable(NavItem.More.route) {
             showNavigation(true)
@@ -49,6 +54,10 @@ fun ColumnScope.NavigationGraph(
         composable("cardgen") {
             showNavigation(false)
             BusinessCardGenerateScreen(navigator = navController)
+        }
+        composable("chatbot") {
+            showNavigation(false)
+            Chatbot_info_input()
         }
         composable(
             "share",

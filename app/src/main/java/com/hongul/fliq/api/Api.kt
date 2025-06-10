@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 sealed class Api {
     companion object {
-        internal val retrofit by lazy {
+        private val retrofit by lazy {
             retrofit2.Retrofit.Builder()
                 .baseUrl(BuildConfig.API_URL)
                 .addConverterFactory(GsonConverterFactory.create())

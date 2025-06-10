@@ -39,10 +39,10 @@ import androidx.compose.ui.unit.sp
 fun ScannedInfoCheckPage(onBack: () -> Unit = {}, onNext: () -> Unit) {
     val progress = 0.8f
 
-    val name = remember { mutableStateOf("") }
-    val phone = remember { mutableStateOf("") }
-    val email = remember { mutableStateOf("") }
-    val address = remember { mutableStateOf("") }
+    val name = remember { mutableStateOf("이수진") }
+    val phone = remember { mutableStateOf("123-456-7890") }
+    val email = remember { mutableStateOf("hello@reallygreatsite.com") }
+    val address = remember { mutableStateOf("123 Anywhere St., Any City") }
 
     val errorMessage = remember { mutableStateOf("") }
 

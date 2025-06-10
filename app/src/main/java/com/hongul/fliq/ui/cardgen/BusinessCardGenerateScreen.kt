@@ -29,6 +29,7 @@ import com.hongul.fliq.ui.cardgen.page.BasicInformationPage
 import com.hongul.fliq.ui.cardgen.page.BusinessCardCreationPage
 import com.hongul.fliq.ui.cardgen.page.BusinessCardPhotoGuidePage
 import com.hongul.fliq.ui.cardgen.page.BusinessCardPreviewPage
+import com.hongul.fliq.ui.cardgen.page.BusinessCardPreviewPage2
 import com.hongul.fliq.ui.cardgen.page.BusinessCardScanPage
 import com.hongul.fliq.ui.cardgen.page.CardInputOption
 import com.hongul.fliq.ui.cardgen.page.OrganizationInfoPage
@@ -175,7 +176,7 @@ fun BusinessCardGenerateScreen(
                             onBack = { scope.launch { ps.scrollToPage(6) } },
                         )
 
-                        8 -> BusinessCardPreviewPage(
+                        8 -> BusinessCardPreviewPage2(
                             onBack = { scope.launch { ps.scrollToPage(7) } },
                         )
 

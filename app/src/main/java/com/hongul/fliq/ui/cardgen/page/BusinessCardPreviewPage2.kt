@@ -37,7 +37,7 @@ import com.hongul.fliq.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
-fun BusinessCardPreviewPage(
+fun BusinessCardPreviewPage2(
     onBack: () -> Unit = {},
 ) {
     val progress = 1f
@@ -74,7 +74,7 @@ fun BusinessCardPreviewPage(
             Spacer(modifier = Modifier.height(40.dp))
 
             Image(
-                painter = painterResource(id = R.drawable.card_real),
+                painter = painterResource(id = R.drawable.img_card_example),
                 contentDescription = "명함 상단 이미지",
                 modifier = Modifier
                     .fillMaxWidth()
