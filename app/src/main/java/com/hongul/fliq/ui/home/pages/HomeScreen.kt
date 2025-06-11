@@ -86,7 +86,7 @@ fun HomeScreen(
                 modifier = Modifier.content()
             ) {
 
-                val cardList = listOf<Int>(0)
+                val cardList = listOf<Int>()
                 val pagerState = rememberPagerState { cardList.size + 1 }
 
                 var showInnerContent by remember { mutableStateOf(true) }

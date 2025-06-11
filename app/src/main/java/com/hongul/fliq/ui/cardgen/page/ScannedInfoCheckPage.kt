@@ -178,42 +178,42 @@ fun ScannedInfoCheckPage(onBack: () -> Unit = {}, onNext: () -> Unit) {
                     )
                 )
             }
-
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    text = buildAnnotatedString {
-                        append("태그 ")
-                    },
-                    modifier = Modifier.padding(start = 5.dp, bottom = 4.dp),
-                    fontWeight = FontWeight.Bold
-                )
-
-                OutlinedTextField(
-                    value = address.value,
-                    onValueChange = { address.value = it },
-                    placeholder = { Text("#명함 #디지털명함 #공유", color = Color.Black) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                        .background(
-                            Color.Gray.copy(alpha = 0.1f),
-                            RoundedCornerShape(8.dp)
-                        ), // 배경 설정
-                    shape = RoundedCornerShape(8.dp),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent
-                    )
-                )
-            }
+//
+//
+//            Spacer(modifier = Modifier.height(8.dp))
+//
+//
+//            Column(modifier = Modifier.fillMaxWidth()) {
+//                Text(
+//                    text = buildAnnotatedString {
+//                        append("태그 ")
+//                    },
+//                    modifier = Modifier.padding(start = 5.dp, bottom = 4.dp),
+//                    fontWeight = FontWeight.Bold
+//                )
+//
+//                OutlinedTextField(
+//                    value = address.value,
+//                    onValueChange = { address.value = it },
+//                    placeholder = { Text("#명함 #디지털명함 #공유", color = Color.Black) },
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(vertical = 8.dp)
+//                        .background(
+//                            Color.Gray.copy(alpha = 0.1f),
+//                            RoundedCornerShape(8.dp)
+//                        ), // 배경 설정
+//                    shape = RoundedCornerShape(8.dp),
+//                    colors = TextFieldDefaults.colors(
+//                        focusedContainerColor = Color.Transparent,
+//                        unfocusedContainerColor = Color.Transparent,
+//                        disabledContainerColor = Color.Transparent,
+//                        focusedIndicatorColor = Color.Transparent,
+//                        unfocusedIndicatorColor = Color.Transparent,
+//                        disabledIndicatorColor = Color.Transparent
+//                    )
+//                )
+//            }
 
             Spacer(modifier = Modifier.height(24.dp))
 

@@ -30,6 +30,7 @@ import com.hongul.fliq.ui.cardgen.page.BusinessCardCreationPage
 import com.hongul.fliq.ui.cardgen.page.BusinessCardPhotoGuidePage
 import com.hongul.fliq.ui.cardgen.page.BusinessCardPreviewPage
 import com.hongul.fliq.ui.cardgen.page.BusinessCardPreviewPage2
+import com.hongul.fliq.ui.cardgen.page.BusinessCardProgressPage
 import com.hongul.fliq.ui.cardgen.page.BusinessCardScanPage
 import com.hongul.fliq.ui.cardgen.page.CardInputOption
 import com.hongul.fliq.ui.cardgen.page.OrganizationInfoPage
@@ -61,8 +62,9 @@ fun BusinessCardGenerateScreen(
                 4 -> "명함 생성"
                 5 -> "명함 생성"
                 6 -> "명함 생성"
-                7 -> "명함 자동 생성"
+                7 -> "명함 생성"
                 8 -> "명함 자동 생성"
+                9 -> "명함 자동 생성"
                 else -> "명함 생성"
             }
         }
@@ -86,18 +88,18 @@ fun BusinessCardGenerateScreen(
 
                             else -> {
                                 val navigator = null
-                                when (ps.currentPage) {
-                                    //0 -> navigator.popBackStack()
-                                    1 -> scope.launch { ps.scrollToPage(0) }
-                                    2 -> scope.launch { ps.scrollToPage(1) }
-                                    3 -> scope.launch { ps.scrollToPage(2) }
-                                    4 -> scope.launch { ps.scrollToPage(3) }
-                                    5 -> scope.launch { ps.scrollToPage(0) }
-                                    6 -> scope.launch { ps.scrollToPage(5) }
-                                    7 -> scope.launch { ps.scrollToPage(6) }
-                                    8 -> scope.launch { ps.scrollToPage(7) }
-                                    else -> scope.launch { ps.scrollToPage(0) }
-                                }
+//                                when (ps.currentPage) {
+//                                    //0 -> navigator.popBackStack()
+//                                    1 -> scope.launch { ps.scrollToPage(0) }
+//                                    2 -> scope.launch { ps.scrollToPage(1) }
+//                                    3 -> scope.launch { ps.scrollToPage(2) }
+//                                    4 -> scope.launch { ps.scrollToPage(3) }
+//                                    5 -> scope.launch { ps.scrollToPage(0) }
+//                                    6 -> scope.launch { ps.scrollToPage(5) }
+//                                    7 -> scope.launch { ps.scrollToPage(6) }
+//                                    8 -> scope.launch { ps.scrollToPage(7) }
+//                                    else -> scope.launch { ps.scrollToPage(0) }
+//                                }
                             }
                         }
                     }) {
@@ -133,7 +135,7 @@ fun BusinessCardGenerateScreen(
                             onNavigateToNext = {
                                 when (selectedOption) {
                                     CardInputOption.Photo -> scope.launch { ps.scrollToPage(1) } // 📸 사진 경로
-                                    CardInputOption.Auto -> scope.launch { ps.scrollToPage(5) }  // 🤖 자동 생성 경로
+                                    CardInputOption.Auto -> scope.launch { ps.scrollToPage(6) }  // 🤖 자동 생성 경로
                                     null -> {
                                         // 예: Toast로 "옵션을 선택하세요" 출력
                                     }
@@ -151,33 +153,38 @@ fun BusinessCardGenerateScreen(
                             onNext = { scope.launch { ps.scrollToPage(3) } },
                         )
 
-                        3 -> ScannedInfoCheckPage(
-                            onNext = { scope.launch { ps.scrollToPage(4) } },
+                        3 -> BusinessCardProgressPage(
                             onBack = { scope.launch { ps.scrollToPage(2) } },
+                            onNext = { scope.launch { ps.scrollToPage(4) } },
                         )
 
-                        4 -> BusinessCardPreviewPage(
-                            //onNext = { scope.launch { ps.scrollToPage(5) } },
+                        4 -> ScannedInfoCheckPage(
+                            onNext = { scope.launch { ps.scrollToPage(5) } },
                             onBack = { scope.launch { ps.scrollToPage(3) } },
                         )
 
-                        5 -> BasicInformationPage(
-                            onNext = { scope.launch { ps.scrollToPage(6) } },
+                        5 -> BusinessCardPreviewPage(
+                            //onNext = { scope.launch { ps.scrollToPage(5) } },
+                            onBack = { scope.launch { ps.scrollToPage(4) } },
+                        )
+
+                        6 -> BasicInformationPage(
+                            onNext = { scope.launch { ps.scrollToPage(7) } },
                             onBack = { scope.launch { ps.scrollToPage(0) } },
                         )
 
-                        6 -> OrganizationInfoPage(
-                            onNext = { scope.launch { ps.scrollToPage(7) } },
-                            onBack = { scope.launch { ps.scrollToPage(5) } },
-                        )
-
-                        7 -> BusinessCardCreationPage(
+                        7 -> OrganizationInfoPage(
                             onNext = { scope.launch { ps.scrollToPage(8) } },
                             onBack = { scope.launch { ps.scrollToPage(6) } },
                         )
 
-                        8 -> BusinessCardPreviewPage2(
+                        8 -> BusinessCardCreationPage(
+                            onNext = { scope.launch { ps.scrollToPage(9) } },
                             onBack = { scope.launch { ps.scrollToPage(7) } },
+                        )
+
+                        9 -> BusinessCardPreviewPage2(
+                            onBack = { scope.launch { ps.scrollToPage(8) } },
                         )
 
                     }
@@ -189,7 +196,7 @@ fun BusinessCardGenerateScreen(
     BackHandler {
         when (ps.currentPage) {
             0 -> navigator.popBackStack()
-            5 -> scope.launch { ps.scrollToPage(0) }
+            6 -> scope.launch { ps.scrollToPage(0) }
             else -> scope.launch { ps.scrollToPage(ps.currentPage - 1) }
         }
     }
